@@ -22,7 +22,7 @@
     <div class="input-group">
         <input type="text" class="form-control" id="todoSzoveg" name="todoSzoveg" placeholder="TODO" required>
         <input type="date" class="form-control" id="todoDatum" name="todoDatum" required>
-        <button class="btn btn-primary">Add</button>
+        <button class="btn btn-primary" name="elkuld">Add</button>
     </div>
     <article>
     </article>

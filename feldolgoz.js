@@ -1,8 +1,11 @@
 $(function () {
-    kuld();
+    beolvas();
     if ($("#todoSzoveg").text !== "" && $("#todoDatum").text !== "") {
         $(".btn").on("click", kuld);
     }
+    var article = $("article");
+    article.delegate(".kuka", "click", torles);
+    article.delegate(".pipa", "click", modosit);
 
 });
 
@@ -17,16 +20,14 @@ function kuld() {
         todoSzoveg: $("#todoSzoveg").val(),
         todoDatum: $("#todoDatum").val()
     };
-
     $.ajax({
         type: "POST",
-        url: "feldolgoz.php",
+        url: "adatfeltolt.php",
         data: todo,
         success: function (ujTodo) {
-            //console.log(ujTodo);
-            todoAdat = JSON.parse(ujTodo);
-            //console.log(todoAdat);
-            kiir();
+            console.log("Sikeres adatfeltöltés!");
+            beolvas();
+
         },
         error: function () {
             alert("Hiba az adatok feltöltésekor!");
@@ -34,47 +35,80 @@ function kuld() {
     });
 }
 
+function beolvas() {
+    $.ajax({
+        type: "POST",
+        url: "feldolgoz.php",
+        success: function (ujTodo) {
+            //console.log(ujTodo);
+            try {
+                todoAdat = JSON.parse(ujTodo);
+                //beolvas();
+                kiir();
+            } catch (e) {
+                $("article").empty();
+            }
+            //console.log("Sikeres adatfeltöltés!");
+        },
+        error: function () {
+            alert("Hiba az adatok lekérésekor!");
+        }
+    });
+}
+
+
 //adatbázisból érkező adat kiírása 'li' tagek közé
 function kiir() {
     var article = $('article');
     article.empty();
     var txt = "<table class=\"table table-borderless\"><tbody>";
-    //for (var i = 0; i < todoAdat.length; i++) {
-    todoAdat.forEach(function (element) {
-        txt += "<tr><td>" + element.todo + "</td><td>" + element.datum + "</td><tr>";
-    });
-    /* foreach(){
-     var todoSzoveg = todoAdat[i].todo;
-     var todoDatum = todoAdat[i].datum;
- }*/
+    if (Boolean(todoAdat)) {
+        todoAdat.forEach(function (element) {
+            if (element.allapot == 0) {
+                txt += "<tr><td>" + element.todo + "</td><td>" + element.datum + "</td><td><img src=\"../../todoProjekt0329/kuka.png\" id='" + element.ID + "' alt=\"\" class='kuka'/><img src=\"../../todoProjekt0329/pipa.png\" id='" + element.ID + "' alt=\"\" class='pipa'/></td><tr>";
+            } else {
+                txt += "<tr><td><s>" + element.todo + "</s></td><td><s>" + element.datum + "</s></td><td><img src=\"../../todoProjekt0329/kuka.png\" id='" + element.ID + "' alt=\"\" class='kuka'/><img src=\"../../todoProjekt0329/pipa.png\" id='" + element.ID + "' alt=\"\" class='pipa'/></td><tr>";
+            }
+            //console.log(todoAdat);
+        });
+    }
+
     txt += "</tbody></table>";
     article.append(txt);
-    /*<table class="table table-borderless">
-    <thead>
-      <tr>
-        <th>Firstname</th>
-        <th>Lastname</th>
-        <th>Email</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>John</td>
-        <td>Doe</td>
-        <td>john@example.com</td>
-      </tr>
-      <tr>
-        <td>Mary</td>
-        <td>Moe</td>
-        <td>mary@example.com</td>
-      </tr>
-      <tr>
-        <td>July</td>
-        <td>Dooley</td>
-        <td>july@example.com</td>
-      </tr>
-    </tbody>
-  </table>*/
+}
+
+function torles() {
+    var id = $(this).attr("id");
+
+    $.ajax({
+        type: "GET",
+        url: "torol.php?ID=" + id,
+        success: function () {
+            console.log("Törlés");
+            beolvas();
+        },
+        error: function () {
+            alert("Hiba az adatok törlésekor!");
+        }
+    });
+}
+
+function modosit() {
+
+
+    var index = $(this).attr("id");
+
+    $.ajax({
+        type: "GET",
+        url: "modosit.php?index=" + index,
+        success: function () {
+            console.log("Módosít");
+            beolvas();
+        },
+        error: function () {
+            alert("Hiba az adatok módosításakor!");
+        }
+    });
 
 
 }

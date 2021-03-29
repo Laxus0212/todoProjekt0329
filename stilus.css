@@ -18,3 +18,10 @@ main{
 main *{
     padding: 10px;
 }
+img{
+    width: 20px;
+    height: 20px;
+    padding: 0px;
+    margin-left: 10px;
+
+}
