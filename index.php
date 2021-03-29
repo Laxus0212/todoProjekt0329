@@ -18,16 +18,15 @@
 <h1>Teendők</h1>
 <main>
     <h2>TODO lista</h2>
-    <form id="form">
-        <div class="input-group">
-            <input type="text" class="form-control" id="todoSzoveg" name="todoSzoveg" placeholder="TODO">
-            <input type="date" class="form-control" id="todoDatum" name="todoDatum">
-            <button class="btn btn-primary">Add</button>
-        </div>
-    </form>
+
+    <div class="input-group">
+        <input type="text" class="form-control" id="todoSzoveg" name="todoSzoveg" placeholder="TODO" required>
+        <input type="date" class="form-control" id="todoDatum" name="todoDatum" required>
+        <button class="btn btn-primary">Add</button>
+    </div>
     <article>
     </article>
-    </article>
+
 </main>
 <footer>Váradi Zsolt</footer>
 </body>
